@@ -592,6 +592,30 @@ const styles = {
     fontWeight: "bold",
     marginBottom: "10px",
   },
+
+  // NEW: this replaces the old High/Medium risk badge on the client cards
+  callCountBadge: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: "78px",
+    padding: "8px 14px",
+    borderRadius: "999px",
+    backgroundColor: theme.accent,
+    color: "#FAF9F6",
+    fontWeight: "bold",
+  },
+  callCountNumber: {
+    fontSize: "18px",
+    lineHeight: 1,
+  },
+  callCountLabel: {
+    fontSize: "11px",
+    marginTop: "3px",
+    opacity: 0.9,
+  },
+
   detailGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
@@ -1046,12 +1070,14 @@ function App() {
                       <div style={styles.darkSmallText}>{client.id}</div>
                     </div>
 
-                    <div style={getRiskBadgeStyle(client.riskLevel)}>{client.riskLevel}</div>
+                    <div style={styles.callCountBadge}>
+                      <span style={styles.callCountNumber}>{client.calls}</span>
+                      <span style={styles.callCountLabel}>Calls</span>
+                    </div>
                   </div>
 
                   <div style={styles.row}>
                     <div style={styles.darkSmallText}>Risk Score: {client.riskScore.toFixed(2)}</div>
-                    <div style={styles.darkSmallText}>Calls: {client.calls}</div>
                     <div style={styles.darkSmallText}>Last Call: {client.lastCall}</div>
                   </div>
                 </div>
