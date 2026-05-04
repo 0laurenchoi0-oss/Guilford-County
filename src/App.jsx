@@ -506,6 +506,12 @@ const styles = {
     gap: "16px",
     marginBottom: "6px",
   },
+  overviewStatsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: "16px",
+    marginBottom: "6px",
+  },
   smallCard: {
     backgroundColor: theme.whiteCard,
     color: theme.lightText,
@@ -1028,17 +1034,11 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Operational Overview</h2>
 
-        <div style={styles.statsGrid}>
+        <div style={styles.overviewStatsGrid}>
           <div style={styles.smallCard}>
             <div>Active Clients</div>
             <div style={styles.statNumber}>{activeClientsCount}</div>
             <div style={styles.smallText}>Tracked high-utilizer clients</div>
-          </div>
-
-          <div style={styles.smallCard}>
-            <div>High Risk</div>
-            <div style={styles.statNumber}>{highRiskCount}</div>
-            <div style={styles.smallText}>Clients above the action threshold</div>
           </div>
 
           <div style={styles.smallCard}>
