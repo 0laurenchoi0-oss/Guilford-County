@@ -592,8 +592,6 @@ const styles = {
     fontWeight: "bold",
     marginBottom: "10px",
   },
-
-  // NEW: this replaces the old High/Medium risk badge on the client cards
   callCountBadge: {
     display: "flex",
     flexDirection: "column",
@@ -615,7 +613,6 @@ const styles = {
     marginTop: "3px",
     opacity: 0.9,
   },
-
   detailGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
@@ -657,6 +654,21 @@ const styles = {
     padding: "14px",
     lineHeight: 1.6,
     marginBottom: "16px",
+  },
+  noteTextArea: {
+    width: "100%",
+    minHeight: "120px",
+    backgroundColor: theme.whiteCard,
+    border: `1px solid ${theme.border}`,
+    color: theme.lightText,
+    borderRadius: "14px",
+    padding: "14px",
+    lineHeight: 1.6,
+    marginBottom: "16px",
+    fontFamily: '"Segoe UI", Arial, sans-serif',
+    fontSize: "15px",
+    resize: "vertical",
+    outline: "none",
   },
   summaryStack: {
     display: "grid",
@@ -910,6 +922,16 @@ function App() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [showWelcome, setShowWelcome] = useState(false);
 
+  const [clientNotes, setClientNotes] = useState(() => {
+    const initialNotes = {};
+
+    clients.forEach((client) => {
+      initialNotes[client.id] = client.notes;
+    });
+
+    return initialNotes;
+  });
+
   useEffect(() => {
     setShowWelcome(true);
   }, []);
@@ -988,6 +1010,10 @@ function App() {
     name: `${row.model === "Logistic regression" ? "Log" : "RF"} ${row.patientsFlagged}`,
     capture: row.captureValue,
   }));
+
+  const selectedVisibleFlags = selectedClient.flags.filter(
+    (flag) => flag.toLowerCase() !== "frequent caller"
+  );
 
   const renderDashboardPage = () => (
     <>
@@ -1095,10 +1121,6 @@ function App() {
 
           {selectedClient ? (
             <>
-              <div style={getRiskBadgeStyle(selectedClient.riskLevel)}>
-                {selectedClient.riskLevel} Risk
-              </div>
-
               <h3 style={{ margin: "0 0 6px 0", color: theme.lightText, fontSize: "20px" }}>
                 {selectedClient.name}
               </h3>
@@ -1142,18 +1164,31 @@ function App() {
               </div>
 
               <div style={styles.flagWrap}>
-                {selectedClient.flags.map((flag) => (
-                  <div key={flag} style={styles.flag}>
-                    {flag}
-                  </div>
-                ))}
+                {selectedVisibleFlags.length > 0 ? (
+                  selectedVisibleFlags.map((flag) => (
+                    <div key={flag} style={styles.flag}>
+                      {flag}
+                    </div>
+                  ))
+                ) : (
+                  <div style={styles.smallText}>No additional risk flags shown.</div>
+                )}
               </div>
 
               <div style={{ marginBottom: "8px", fontWeight: "bold", color: theme.lightText }}>
                 Summary Note
               </div>
 
-              <div style={styles.noteBox}>{selectedClient.notes}</div>
+              <textarea
+                style={styles.noteTextArea}
+                value={clientNotes[selectedClient.id] || ""}
+                onChange={(e) =>
+                  setClientNotes((prevNotes) => ({
+                    ...prevNotes,
+                    [selectedClient.id]: e.target.value,
+                  }))
+                }
+              />
 
               <button style={styles.accentButton}>Contact Us</button>
             </>
