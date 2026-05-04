@@ -110,9 +110,7 @@ const capacityThresholdData = [
     patientsFlagged: 22,
     truePositives: 5,
     precision: "22.7%",
-    precisionValue: 22.7,
     captureRate: "4.8%",
-    captureValue: 4.8,
     allPositives: 105,
   },
   {
@@ -120,9 +118,7 @@ const capacityThresholdData = [
     patientsFlagged: 88,
     truePositives: 20,
     precision: "22.7%",
-    precisionValue: 22.7,
     captureRate: "19.0%",
-    captureValue: 19.0,
     allPositives: 105,
   },
   {
@@ -130,9 +126,7 @@ const capacityThresholdData = [
     patientsFlagged: 100,
     truePositives: 23,
     precision: "23.0%",
-    precisionValue: 23.0,
     captureRate: "21.9%",
-    captureValue: 21.9,
     allPositives: 105,
   },
   {
@@ -140,9 +134,7 @@ const capacityThresholdData = [
     patientsFlagged: 200,
     truePositives: 36,
     precision: "18.0%",
-    precisionValue: 18.0,
     captureRate: "34.3%",
-    captureValue: 34.3,
     allPositives: 105,
   },
   {
@@ -150,9 +142,7 @@ const capacityThresholdData = [
     patientsFlagged: 22,
     truePositives: 6,
     precision: "27.3%",
-    precisionValue: 27.3,
     captureRate: "5.7%",
-    captureValue: 5.7,
     allPositives: 105,
   },
   {
@@ -160,9 +150,7 @@ const capacityThresholdData = [
     patientsFlagged: 88,
     truePositives: 14,
     precision: "15.9%",
-    precisionValue: 15.9,
     captureRate: "13.3%",
-    captureValue: 13.3,
     allPositives: 105,
   },
   {
@@ -170,9 +158,7 @@ const capacityThresholdData = [
     patientsFlagged: 100,
     truePositives: 16,
     precision: "16.0%",
-    precisionValue: 16.0,
     captureRate: "15.2%",
-    captureValue: 15.2,
     allPositives: 105,
   },
   {
@@ -180,9 +166,7 @@ const capacityThresholdData = [
     patientsFlagged: 200,
     truePositives: 30,
     precision: "15.0%",
-    precisionValue: 15.0,
     captureRate: "28.6%",
-    captureValue: 28.6,
     allPositives: 105,
   },
 ];
@@ -372,12 +356,6 @@ const theme = {
   chartTeal: "#2A9D8F",
   chartSoftTeal: "#00B4D8",
   chartBeige: "#3A86FF",
-  highRiskBg: "#EF476F",
-  highRiskText: "#FAF9F6",
-  mediumRiskBg: "#F4A261",
-  mediumRiskText: "#1F3C88",
-  lowRiskBg: "#A8DADC",
-  lowRiskText: "#1F3C88",
 };
 
 const styles = {
@@ -590,14 +568,6 @@ const styles = {
     fontSize: "13px",
     marginTop: "4px",
   },
-  badge: {
-    display: "inline-block",
-    padding: "6px 12px",
-    borderRadius: "999px",
-    fontSize: "12px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
   callCountBadge: {
     display: "flex",
     flexDirection: "column",
@@ -651,15 +621,6 @@ const styles = {
     borderRadius: "999px",
     padding: "8px 12px",
     fontSize: "12px",
-  },
-  noteBox: {
-    backgroundColor: theme.whiteCard,
-    border: `1px solid ${theme.border}`,
-    color: theme.lightText,
-    borderRadius: "14px",
-    padding: "14px",
-    lineHeight: 1.6,
-    marginBottom: "16px",
   },
   noteTextArea: {
     width: "100%",
@@ -739,7 +700,7 @@ const styles = {
     borderRadius: "18px",
     padding: "18px",
     border: `1px solid ${theme.lightBorder}`,
-    minHeight: "360px",
+    minHeight: "380px",
     boxSizing: "border-box",
   },
   modalOverlay: {
@@ -817,16 +778,6 @@ const styles = {
   },
 };
 
-function getRiskBadgeStyle(level) {
-  if (level === "High") {
-    return { ...styles.badge, backgroundColor: theme.highRiskBg, color: theme.highRiskText };
-  }
-  if (level === "Medium") {
-    return { ...styles.badge, backgroundColor: theme.mediumRiskBg, color: theme.mediumRiskText };
-  }
-  return { ...styles.badge, backgroundColor: theme.lowRiskBg, color: theme.lowRiskText };
-}
-
 function formatDollar(value) {
   if (value === null || value === undefined) return "---";
   return `$${value.toLocaleString()}`;
@@ -885,6 +836,40 @@ function SimpleTable({ columns, data, rowStyle }) {
   );
 }
 
+function WrappedXAxisTick({ x, y, payload }) {
+  const words = payload.value.split(" ");
+  const lines = [];
+
+  words.forEach((word) => {
+    const currentLine = lines[lines.length - 1];
+
+    if (!currentLine || `${currentLine} ${word}`.length > 16) {
+      lines.push(word);
+    } else {
+      lines[lines.length - 1] = `${currentLine} ${word}`;
+    }
+  });
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={12}
+        textAnchor="middle"
+        fill={theme.lightMuted}
+        fontSize={12}
+      >
+        {lines.map((line, index) => (
+          <tspan key={index} x={0} dy={index === 0 ? 0 : 14}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    </g>
+  );
+}
+
 function WelcomeModal({ onClose }) {
   return (
     <div style={styles.modalOverlay}>
@@ -895,8 +880,9 @@ function WelcomeModal({ onClose }) {
           This web application is a mock operational dashboard designed by a team of Weitzman School
           of Design Master of City Planning students to show how a Guilford County EMS super user
           case management tool could work. It includes a client dashboard page for case workers to
-          review client information, a statistics page outlining the background and needs of super users,
-          and a cost savings page summarizing the amount saved at different staff capacity levels.
+          review client information, a model results page outlining model performance and super-user
+          indicators, and a cost savings page summarizing the amount saved at different staff capacity
+          levels.
         </p>
 
         <p style={styles.modalText}>
@@ -958,7 +944,6 @@ function App() {
     filteredClients.find((client) => client.id === selectedId) || filteredClients[0] || clients[0];
 
   const activeClientsCount = clients.length;
-  const highRiskCount = clients.filter((client) => client.riskLevel === "High").length;
   const newCount = clients.filter((client) => client.status === "New").length;
   const overdueCount = 2;
 
@@ -1000,22 +985,24 @@ function App() {
     return acc;
   }, {});
 
-  const flagsData = Object.entries(flagCounts).map(([name, value]) => ({
-    name,
-    value,
-  }));
+  const flagLabelMap = {
+    "Homelessness flag": "Homelessness",
+    "Recent call increase": "Recent Call Increase",
+    "Repeat non-emergency use": "Repeat Non-Emergency",
+    "Behavioral health concern": "Behavioral Health",
+    "Chronic condition": "Chronic Condition",
+    "Missed follow-up": "Missed Follow-up",
+    "Prior outreach success": "Prior Outreach Success",
+  };
+
+  const flagsData = Object.entries(flagCounts)
+    .filter(([name]) => name.toLowerCase() !== "frequent caller")
+    .map(([name, value]) => ({
+      name: flagLabelMap[name] || name,
+      value,
+    }));
 
   const pieColors = [theme.chartGold, theme.chartTeal, theme.chartSoftTeal, theme.chartBeige];
-
-  const precisionChartData = capacityThresholdData.map((row) => ({
-    name: `${row.model === "Logistic regression" ? "Log" : "RF"} ${row.patientsFlagged}`,
-    precision: row.precisionValue,
-  }));
-
-  const captureChartData = capacityThresholdData.map((row) => ({
-    name: `${row.model === "Logistic regression" ? "Log" : "RF"} ${row.patientsFlagged}`,
-    capture: row.captureValue,
-  }));
 
   const selectedVisibleFlags = selectedClient.flags.filter(
     (flag) => flag.toLowerCase() !== "frequent caller"
@@ -1203,7 +1190,7 @@ function App() {
   const renderSummaryPage = () => (
     <>
       <div style={styles.pageHeader}>
-        <h1 style={styles.pageTitle}>Super-User Summary Statistics</h1>
+        <h1 style={styles.pageTitle}>Model Results</h1>
         <p style={styles.pageSubtitle}>
           Model and population-level results from the EMS super-user risk analysis. This page summarizes
           model performance, outreach capacity thresholds, and key client-level indicators that support
@@ -1280,46 +1267,11 @@ function App() {
         />
       </div>
 
-      <div style={styles.chartGrid}>
-        <div style={styles.chartCard}>
-          <h3 style={styles.chartTitle}>Precision by Capacity Threshold</h3>
-          <p style={styles.chartSubtitle}>
-            Higher precision means a larger share of flagged clients actually became future super users.
-          </p>
-
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={precisionChartData} margin={{ top: 10, right: 20, left: 0, bottom: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={theme.lightBorder} />
-              <XAxis dataKey="name" stroke={theme.lightMuted} />
-              <YAxis stroke={theme.lightMuted} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="precision" name="Precision (%)" fill={theme.chartGold} radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div style={styles.chartCard}>
-          <h3 style={styles.chartTitle}>Capture Rate by Capacity Threshold</h3>
-          <p style={styles.chartSubtitle}>
-            Capture rate shows how many future super users are identified within each capacity limit.
-          </p>
-
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={captureChartData} margin={{ top: 10, right: 20, left: 0, bottom: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={theme.lightBorder} />
-              <XAxis dataKey="name" stroke={theme.lightMuted} />
-              <YAxis stroke={theme.lightMuted} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="capture" name="Capture rate (%)" fill={theme.chartTeal} radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Classification Metrics at 0.30 Threshold</h2>
         <p style={styles.chartSubtitle}>
-          These metrics describe binary classification performance when the selected model uses a 0.30 risk-score threshold.
+          These metrics describe binary classification performance when the selected model uses a 0.30
+          risk-score threshold.
         </p>
 
         <div style={styles.chartGrid}>
@@ -1445,16 +1397,15 @@ function App() {
             <h3 style={styles.chartTitle}>Flags Breakdown</h3>
             <p style={styles.chartSubtitle}>Count of major risk flags across tracked clients.</p>
 
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={flagsData} margin={{ top: 10, right: 20, left: 0, bottom: 50 }}>
+            <ResponsiveContainer width="100%" height={285}>
+              <BarChart data={flagsData} margin={{ top: 10, right: 20, left: 0, bottom: 80 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={theme.lightBorder} />
                 <XAxis
                   dataKey="name"
                   stroke={theme.lightMuted}
-                  angle={-20}
-                  textAnchor="end"
                   interval={0}
-                  height={70}
+                  height={100}
+                  tick={<WrappedXAxisTick />}
                 />
                 <YAxis stroke={theme.lightMuted} allowDecimals={false} />
                 <Tooltip content={<CustomTooltip />} />
@@ -1741,7 +1692,7 @@ function App() {
               }}
               onClick={() => setCurrentPage("summary")}
             >
-              Summary Statistics
+              Model Results
             </button>
 
             <button
