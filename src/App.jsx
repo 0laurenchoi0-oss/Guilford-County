@@ -836,40 +836,6 @@ function SimpleTable({ columns, data, rowStyle }) {
   );
 }
 
-function WrappedXAxisTick({ x, y, payload }) {
-  const words = payload.value.split(" ");
-  const lines = [];
-
-  words.forEach((word) => {
-    const currentLine = lines[lines.length - 1];
-
-    if (!currentLine || `${currentLine} ${word}`.length > 16) {
-      lines.push(word);
-    } else {
-      lines[lines.length - 1] = `${currentLine} ${word}`;
-    }
-  });
-
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={12}
-        textAnchor="middle"
-        fill={theme.lightMuted}
-        fontSize={12}
-      >
-        {lines.map((line, index) => (
-          <tspan key={index} x={0} dy={index === 0 ? 0 : 14}>
-            {line}
-          </tspan>
-        ))}
-      </text>
-    </g>
-  );
-}
-
 function WelcomeModal({ onClose }) {
   return (
     <div style={styles.modalOverlay}>
@@ -1397,19 +1363,38 @@ function App() {
             <h3 style={styles.chartTitle}>Flags Breakdown</h3>
             <p style={styles.chartSubtitle}>Count of major risk flags across tracked clients.</p>
 
-            <ResponsiveContainer width="100%" height={285}>
-              <BarChart data={flagsData} margin={{ top: 10, right: 20, left: 0, bottom: 80 }}>
+            <ResponsiveContainer width="100%" height={310}>
+              <BarChart
+                data={flagsData}
+                layout="vertical"
+                margin={{ top: 10, right: 30, left: 30, bottom: 10 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke={theme.lightBorder} />
+
                 <XAxis
+                  type="number"
+                  stroke={theme.lightMuted}
+                  allowDecimals={false}
+                  domain={[0, 2]}
+                />
+
+                <YAxis
+                  type="category"
                   dataKey="name"
                   stroke={theme.lightMuted}
-                  interval={0}
-                  height={100}
-                  tick={<WrappedXAxisTick />}
+                  width={170}
+                  tick={{ fontSize: 12 }}
                 />
-                <YAxis stroke={theme.lightMuted} allowDecimals={false} />
+
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="value" name="Count" fill={theme.chartGold} radius={[6, 6, 0, 0]} />
+
+                <Bar
+                  dataKey="value"
+                  name="Count"
+                  fill={theme.chartGold}
+                  radius={[0, 6, 6, 0]}
+                  barSize={22}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
