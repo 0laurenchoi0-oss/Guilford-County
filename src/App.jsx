@@ -1367,10 +1367,53 @@ function App() {
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Summary Statistics</h1>
         <p style={styles.pageSubtitle}>
-          Descriptive statistics and prototype charts summarizing the sample client records shown in
-          the dashboard. These visuals are based on fake sample data and can later be replaced with
+          Descriptive statistics and prototype charts summarizing both current client data and sample client 
+          records shown in the dashboard. The visuals based on fake sample data can later be replaced with
           real dashboard exports.
         </p>
+      </div>
+
+      <div style={styles.largePanel}>
+        <h2 style={styles.sectionTitle}>Client Analysis</h2>
+        <p style={styles.chartSubtitle}>
+          These charts summarize the exploratory data analysis comparing super users and non-super users by 
+          selected demographic and service-related indicators.
+        </p>
+
+        <div style={styles.chartGrid}>
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Race</h3>
+            <p style={styles.chartSubtitle}>
+              Percent of super users and non-super users identified as Black or White. Other races are not included
+              as they do not have enough representation in the current data.
+            </p>
+            <GroupedHorizontalPercentChart data={edaRaceData} max={60} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Gender</h3>
+            <p style={styles.chartSubtitle}>
+              Gender distribution among super users and non-super users.
+            </p>
+            <GroupedHorizontalPercentChart data={edaGenderData} max={100} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Housing Status</h3>
+            <p style={styles.chartSubtitle}>
+              Comparison of homelessness status across super user and non-super user groups.
+            </p>
+            <GroupedHorizontalPercentChart data={edaHousingStatusData} max={100} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Insurance Status</h3>
+            <p style={styles.chartSubtitle}>
+              Share of super users and non-super users with public versus non-public insurance.
+            </p>
+            <GroupedHorizontalPercentChart data={edaInsuranceStatusData} max={100} />
+          </div>
+        </div>
       </div>
 
       <div style={styles.largePanel}>
@@ -1414,49 +1457,6 @@ function App() {
             <div>Total Calls</div>
             <div style={styles.statNumber}>{totalCalls}</div>
             <div style={styles.smallText}>Combined call volume across tracked clients</div>
-          </div>
-        </div>
-      </div>
-
-      <div style={styles.largePanel}>
-        <h2 style={styles.sectionTitle}>Client Analysis</h2>
-        <p style={styles.chartSubtitle}>
-          These charts summarize the exploratory data analysis comparing super users and non-super users by selected
-          demographic and service-related indicators.
-        </p>
-
-        <div style={styles.chartGrid}>
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>Race</h3>
-            <p style={styles.chartSubtitle}>
-              Percent of super users and non-super users identified as Black or White. Other races are not included in 
-              this chart as they do not have enough representation in the current data.
-            </p>
-            <GroupedHorizontalPercentChart data={edaRaceData} max={60} />
-          </div>
-
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>Gender</h3>
-            <p style={styles.chartSubtitle}>
-              Gender distribution among super users and non-super users.
-            </p>
-            <GroupedHorizontalPercentChart data={edaGenderData} max={100} />
-          </div>
-
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>Housing Status</h3>
-            <p style={styles.chartSubtitle}>
-              Comparison of homelessness status across super user and non-super user groups.
-            </p>
-            <GroupedHorizontalPercentChart data={edaHousingStatusData} max={100} />
-          </div>
-
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>Insurance Status</h3>
-            <p style={styles.chartSubtitle}>
-              Share of super users and non-super users with public versus non-public insurance.
-            </p>
-            <GroupedHorizontalPercentChart data={edaInsuranceStatusData} max={100} />
           </div>
         </div>
       </div>
