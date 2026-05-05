@@ -332,10 +332,29 @@ const financeSummary = {
   bestNetSavings: "$415,000",
   maxSuperUsers: 417,
   costPerCall: "$1,500",
-  salaryPerWorker: "$37,426",
   caseloadPerWorker: 11,
   caseDurationMonths: 3,
 };
+
+const edaRaceData = [
+  { category: "Black", Super: 54, "Non-super": 43 },
+  { category: "White", Super: 44, "Non-super": 47 },
+];
+
+const edaHousingStatusData = [
+  { category: "Homeless", Super: 3.5, "Non-super": 0.8 },
+  { category: "Not Homeless", Super: 96.5, "Non-super": 99.2 },
+];
+
+const edaInsuranceStatusData = [
+  { category: "Public", Super: 27.5, "Non-super": 20 },
+  { category: "Not Public", Super: 72.5, "Non-super": 80 },
+];
+
+const edaGenderData = [
+  { category: "Male", Super: 51.5, "Non-super": 44.5 },
+  { category: "Female", Super: 48.5, "Non-super": 55.5 },
+];
 
 const theme = {
   background: "#FFFFFF",
@@ -481,6 +500,12 @@ const styles = {
   statsGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+    gap: "16px",
+    marginBottom: "6px",
+  },
+  summaryStatsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
     gap: "16px",
     marginBottom: "6px",
   },
@@ -836,6 +861,61 @@ function SimpleTable({ columns, data, rowStyle }) {
   );
 }
 
+function GroupedHorizontalPercentChart({ data, max = 100 }) {
+  return (
+    <ResponsiveContainer width="100%" height={285}>
+      <BarChart
+        data={data}
+        layout="vertical"
+        margin={{ top: 10, right: 35, left: 25, bottom: 10 }}
+        barGap={4}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke={theme.lightBorder} />
+
+        <XAxis
+          type="number"
+          stroke={theme.lightMuted}
+          domain={[0, max]}
+          tickFormatter={(value) => `${value}%`}
+        />
+
+        <YAxis
+          type="category"
+          dataKey="category"
+          stroke={theme.lightMuted}
+          width={115}
+          tick={{ fontSize: 12 }}
+        />
+
+        <Tooltip
+          formatter={(value) => `${value}%`}
+          contentStyle={{
+            border: `1px solid ${theme.lightBorder}`,
+            borderRadius: "10px",
+            color: theme.lightText,
+          }}
+        />
+
+        <Legend />
+
+        <Bar
+          dataKey="Super"
+          fill={theme.chartGold}
+          radius={[0, 6, 6, 0]}
+          barSize={18}
+        />
+
+        <Bar
+          dataKey="Non-super"
+          fill={theme.border}
+          radius={[0, 6, 6, 0]}
+          barSize={18}
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
 function WelcomeModal({ onClose }) {
   return (
     <div style={styles.modalOverlay}>
@@ -846,9 +926,9 @@ function WelcomeModal({ onClose }) {
           This web application is a mock operational dashboard designed by a team of Weitzman School
           of Design Master of City Planning students to show how a Guilford County EMS super user
           case management tool could work. It includes a client dashboard page for case workers to
-          review client information, a model results page outlining model performance and super-user
-          indicators, and a cost savings page summarizing the amount saved at different staff capacity
-          levels.
+          review client information, a model results page outlining model performance, a summary
+          statistics page showing descriptive client indicators, and a cost savings page summarizing
+          the amount saved at different staff capacity levels.
         </p>
 
         <p style={styles.modalText}>
@@ -921,10 +1001,6 @@ function App() {
     client.flags.some((flag) => flag.toLowerCase().includes("behavioral"))
   ).length;
 
-  const frequentCallerCount = clients.filter((client) =>
-    client.flags.some((flag) => flag.toLowerCase().includes("frequent caller"))
-  ).length;
-
   const repeatNonEmergencyCount = clients.filter((client) =>
     client.flags.some((flag) => flag.toLowerCase().includes("repeat non-emergency"))
   ).length;
@@ -932,7 +1008,6 @@ function App() {
   const totalCalls = clients.reduce((sum, client) => sum + client.calls, 0);
   const avgCallsPerClient = (totalCalls / clients.length).toFixed(1);
   const highestCallVolume = Math.max(...clients.map((client) => client.calls));
-  const mediumRiskCount = clients.filter((client) => client.riskLevel === "Medium").length;
 
   const housingCounts = clients.reduce((acc, client) => {
     acc[client.housing] = (acc[client.housing] || 0) + 1;
@@ -1153,14 +1228,13 @@ function App() {
     </>
   );
 
-  const renderSummaryPage = () => (
+  const renderModelResultsPage = () => (
     <>
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Model Results</h1>
         <p style={styles.pageSubtitle}>
-          Model and population-level results from the EMS super-user risk analysis. This page summarizes
-          model performance, outreach capacity thresholds, and key client-level indicators that support
-          staffing, planning, and program design conversations.
+          Model results from the EMS super-user risk analysis. This page summarizes model performance,
+          outreach capacity thresholds, and interpretation for staffing and program design conversations.
         </p>
       </div>
 
@@ -1269,12 +1343,43 @@ function App() {
       </div>
 
       <div style={styles.largePanel}>
+        <div style={styles.summaryStack}>
+          <div style={styles.summaryBigCard}>
+            <h2 style={styles.summaryHeadline}>Operational Takeaway</h2>
+            <div style={styles.summaryValue}>88</div>
+            <div style={styles.smallText}>Estimated annual client capacity with current staffing</div>
+            <div style={styles.summaryDivider} />
+
+            <ul style={styles.insightList}>
+              <li>Logistic regression performs better on PR-AUC and precision at current annual capacity.</li>
+              <li>Random forest has slightly higher ROC-AUC but lower precision at top 88.</li>
+              <li>The dashboard should support ranked review rather than only binary classification.</li>
+              <li>Capacity thresholds help connect model output to staffing and outreach planning.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
+  const renderSummaryStatsPage = () => (
+    <>
+      <div style={styles.pageHeader}>
+        <h1 style={styles.pageTitle}>Summary Statistics</h1>
+        <p style={styles.pageSubtitle}>
+          Descriptive statistics and prototype charts summarizing the sample client records shown in
+          the dashboard. These visuals are based on fake sample data and can later be replaced with
+          real dashboard exports.
+        </p>
+      </div>
+
+      <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Client Population Indicators</h2>
         <p style={styles.chartSubtitle}>
           These prototype statistics summarize the fake sample client records currently shown in the dashboard.
         </p>
 
-        <div style={styles.statsGrid}>
+        <div style={styles.summaryStatsGrid}>
           <div style={styles.smallCard}>
             <div>Housing Instability</div>
             <div style={styles.statNumber}>{unstableHousingCount}</div>
@@ -1288,19 +1393,11 @@ function App() {
           </div>
 
           <div style={styles.smallCard}>
-            <div>Frequent Callers</div>
-            <div style={styles.statNumber}>{frequentCallerCount}</div>
-            <div style={styles.smallText}>Clients flagged for repeated EMS utilization</div>
-          </div>
-
-          <div style={styles.smallCard}>
             <div>Avg Calls per Client</div>
             <div style={styles.statNumber}>{avgCallsPerClient}</div>
             <div style={styles.smallText}>Average call volume across tracked clients</div>
           </div>
-        </div>
 
-        <div style={{ ...styles.statsGrid, marginTop: "16px" }}>
           <div style={styles.smallCard}>
             <div>Repeat Non-Emergency Use</div>
             <div style={styles.statNumber}>{repeatNonEmergencyCount}</div>
@@ -1314,15 +1411,51 @@ function App() {
           </div>
 
           <div style={styles.smallCard}>
-            <div>Medium Risk</div>
-            <div style={styles.statNumber}>{mediumRiskCount}</div>
-            <div style={styles.smallText}>Clients below high-risk threshold but still elevated</div>
-          </div>
-
-          <div style={styles.smallCard}>
             <div>Total Calls</div>
             <div style={styles.statNumber}>{totalCalls}</div>
             <div style={styles.smallText}>Combined call volume across tracked clients</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={styles.largePanel}>
+        <h2 style={styles.sectionTitle}>Client Analysis</h2>
+        <p style={styles.chartSubtitle}>
+          These charts summarize the exploratory data analysis comparing super users and non-super users by selected
+          demographic and service-related indicators.
+        </p>
+
+        <div style={styles.chartGrid}>
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Race</h3>
+            <p style={styles.chartSubtitle}>
+              Percent of super users and non-super users identified as Black or White.
+            </p>
+            <GroupedHorizontalPercentChart data={edaRaceData} max={60} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Gender</h3>
+            <p style={styles.chartSubtitle}>
+              Gender distribution among super users and non-super users.
+            </p>
+            <GroupedHorizontalPercentChart data={edaGenderData} max={100} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Housing Status</h3>
+            <p style={styles.chartSubtitle}>
+              Comparison of homelessness status across super user and non-super user groups.
+            </p>
+            <GroupedHorizontalPercentChart data={edaHousingStatusData} max={100} />
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Insurance Status</h3>
+            <p style={styles.chartSubtitle}>
+              Share of super users and non-super users with public versus non-public insurance.
+            </p>
+            <GroupedHorizontalPercentChart data={edaInsuranceStatusData} max={100} />
           </div>
         </div>
       </div>
@@ -1427,24 +1560,6 @@ function App() {
           </ResponsiveContainer>
         </div>
       </div>
-
-      <div style={styles.largePanel}>
-        <div style={styles.summaryStack}>
-          <div style={styles.summaryBigCard}>
-            <h2 style={styles.summaryHeadline}>Operational Takeaway</h2>
-            <div style={styles.summaryValue}>88</div>
-            <div style={styles.smallText}>Estimated annual client capacity with current staffing</div>
-            <div style={styles.summaryDivider} />
-
-            <ul style={styles.insightList}>
-              <li>Logistic regression performs better on PR-AUC and precision at current annual capacity.</li>
-              <li>Random forest has slightly higher ROC-AUC but lower precision at top 88.</li>
-              <li>The dashboard should support ranked review rather than only binary classification.</li>
-              <li>Capacity thresholds help connect model output to staffing and outreach planning.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </>
   );
 
@@ -1492,17 +1607,11 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Cost/Benefit Assumptions</h2>
 
-        <div style={styles.statsGrid}>
+        <div style={styles.overviewStatsGrid}>
           <div style={styles.smallCard}>
             <div>Cost per EMS Call</div>
             <div style={styles.statNumber}>{financeSummary.costPerCall}</div>
             <div style={styles.smallText}>Placeholder estimate used in model</div>
-          </div>
-
-          <div style={styles.smallCard}>
-            <div>Annual Salary</div>
-            <div style={styles.statNumber}>{financeSummary.salaryPerWorker}</div>
-            <div style={styles.smallText}>Per social worker</div>
           </div>
 
           <div style={styles.smallCard}>
@@ -1673,11 +1782,21 @@ function App() {
             <button
               style={{
                 ...styles.navButton,
-                ...(currentPage === "summary" ? styles.navButtonActive : {}),
+                ...(currentPage === "modelResults" ? styles.navButtonActive : {}),
               }}
-              onClick={() => setCurrentPage("summary")}
+              onClick={() => setCurrentPage("modelResults")}
             >
               Model Results
+            </button>
+
+            <button
+              style={{
+                ...styles.navButton,
+                ...(currentPage === "summaryStats" ? styles.navButtonActive : {}),
+              }}
+              onClick={() => setCurrentPage("summaryStats")}
+            >
+              Summary Statistics
             </button>
 
             <button
@@ -1694,7 +1813,8 @@ function App() {
 
         <main style={styles.content}>
           {currentPage === "dashboard" && renderDashboardPage()}
-          {currentPage === "summary" && renderSummaryPage()}
+          {currentPage === "modelResults" && renderModelResultsPage()}
+          {currentPage === "summaryStats" && renderSummaryStatsPage()}
           {currentPage === "finance" && renderFinancePage()}
         </main>
       </div>
