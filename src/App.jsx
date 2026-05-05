@@ -1429,7 +1429,8 @@ function App() {
           <div style={styles.chartCard}>
             <h3 style={styles.chartTitle}>Race</h3>
             <p style={styles.chartSubtitle}>
-              Percent of super users and non-super users identified as Black or White.
+              Percent of super users and non-super users identified as Black or White. Other races are not included in 
+              this chart as they do not have enough representation in the current data.
             </p>
             <GroupedHorizontalPercentChart data={edaRaceData} max={60} />
           </div>
