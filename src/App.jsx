@@ -21,7 +21,6 @@ const clients = [
     name: "A. Johnson",
     age: 58,
     housing: "Unstable",
-    riskScore: 0.93,
     riskLevel: "High",
     calls: 14,
     lastCall: "2026-04-05",
@@ -36,7 +35,6 @@ const clients = [
     name: "M. Brown",
     age: 46,
     housing: "Housed",
-    riskScore: 0.88,
     riskLevel: "High",
     calls: 11,
     lastCall: "2026-04-03",
@@ -51,7 +49,6 @@ const clients = [
     name: "T. Davis",
     age: 67,
     housing: "Housed",
-    riskScore: 0.81,
     riskLevel: "High",
     calls: 9,
     lastCall: "2026-03-30",
@@ -66,7 +63,6 @@ const clients = [
     name: "R. Smith",
     age: 39,
     housing: "Shelter",
-    riskScore: 0.76,
     riskLevel: "Medium",
     calls: 7,
     lastCall: "2026-04-01",
@@ -90,17 +86,17 @@ const monthlyCallTrend = [
 const modelPerformanceData = [
   {
     model: "Logistic regression",
-    prAuc: 0.147,
-    rocAuc: 0.929,
+    prAuc: 0.255,
+    rocAuc: 0.919,
     brier: "NA",
-    precisionTop88: "22.7%",
+    precisionTop88: "40.9%",
   },
   {
     model: "Random forest",
-    prAuc: 0.128,
-    rocAuc: 0.931,
-    brier: 0.114,
-    precisionTop88: "15.9%",
+    prAuc: 0.209,
+    rocAuc: 0.92,
+    brier: 0.129,
+    precisionTop88: "35.2%",
   },
 ];
 
@@ -108,75 +104,75 @@ const capacityThresholdData = [
   {
     model: "Logistic regression",
     patientsFlagged: 22,
-    truePositives: 5,
-    precision: "22.7%",
-    captureRate: "4.8%",
-    allPositives: 105,
+    truePositives: 9,
+    precision: "40.9%",
+    captureRate: "5.4%",
+    allPositives: 166,
   },
   {
     model: "Logistic regression",
     patientsFlagged: 88,
-    truePositives: 20,
-    precision: "22.7%",
-    captureRate: "19.0%",
-    allPositives: 105,
+    truePositives: 36,
+    precision: "40.9%",
+    captureRate: "21.7%",
+    allPositives: 166,
   },
   {
     model: "Logistic regression",
     patientsFlagged: 100,
-    truePositives: 23,
-    precision: "23.0%",
-    captureRate: "21.9%",
-    allPositives: 105,
+    truePositives: 40,
+    precision: "40.0%",
+    captureRate: "24.1%",
+    allPositives: 166,
   },
   {
     model: "Logistic regression",
     patientsFlagged: 200,
-    truePositives: 36,
-    precision: "18.0%",
-    captureRate: "34.3%",
-    allPositives: 105,
+    truePositives: 64,
+    precision: "32.0%",
+    captureRate: "38.6%",
+    allPositives: 166,
   },
   {
     model: "Random forest",
     patientsFlagged: 22,
-    truePositives: 6,
-    precision: "27.3%",
-    captureRate: "5.7%",
-    allPositives: 105,
+    truePositives: 4,
+    precision: "18.2%",
+    captureRate: "2.4%",
+    allPositives: 166,
   },
   {
     model: "Random forest",
     patientsFlagged: 88,
-    truePositives: 14,
-    precision: "15.9%",
-    captureRate: "13.3%",
-    allPositives: 105,
+    truePositives: 31,
+    precision: "35.2%",
+    captureRate: "18.7%",
+    allPositives: 166,
   },
   {
     model: "Random forest",
     patientsFlagged: 100,
-    truePositives: 16,
-    precision: "16.0%",
-    captureRate: "15.2%",
-    allPositives: 105,
+    truePositives: 36,
+    precision: "36.0%",
+    captureRate: "21.7%",
+    allPositives: 166,
   },
   {
     model: "Random forest",
     patientsFlagged: 200,
-    truePositives: 30,
-    precision: "15.0%",
-    captureRate: "28.6%",
-    allPositives: 105,
+    truePositives: 59,
+    precision: "29.5%",
+    captureRate: "35.5%",
+    allPositives: 166,
   },
 ];
 
 const thresholdMetrics = [
-  { metric: "Accuracy", value: 0.672 },
-  { metric: "Recall", value: 0.99 },
-  { metric: "Specificity", value: 0.669 },
-  { metric: "Precision", value: 0.028 },
-  { metric: "F1 score", value: 0.055 },
+  { metric: "Accuracy", value: 0.717 },
+  { metric: "Recall", value: 0.928 },
+  { metric: "Specificity", value: 0.713 },
+  { metric: "Precision", value: 0.047 },
+  { metric: "F1 score", value: 0.09 },
 ];
 
 const benchmarkPrograms = [
@@ -216,121 +212,302 @@ const costBenefitData = [
   {
     workers: 2,
     patientsPerYear: 88,
-    callsAverted: 287,
-    grossSavings: 215000,
+    callsAverted: 309,
+    grossSavings: 232000,
     staffingCost: 75000,
-    netSavings: 140000,
+    netSavings: 157000,
     marginalNetSavings: null,
     current: true,
   },
   {
     workers: 3,
     patientsPerYear: 132,
-    callsAverted: 401,
-    grossSavings: 301000,
+    callsAverted: 408,
+    grossSavings: 306000,
     staffingCost: 112000,
-    netSavings: 188000,
-    marginalNetSavings: 48000,
+    netSavings: 194000,
+    marginalNetSavings: 37000,
   },
   {
     workers: 4,
     patientsPerYear: 176,
-    callsAverted: 486,
-    grossSavings: 365000,
+    callsAverted: 512,
+    grossSavings: 384000,
     staffingCost: 150000,
-    netSavings: 215000,
-    marginalNetSavings: 27000,
+    netSavings: 234000,
+    marginalNetSavings: 40000,
   },
   {
     workers: 5,
     patientsPerYear: 220,
-    callsAverted: 611,
-    grossSavings: 458000,
+    callsAverted: 660,
+    grossSavings: 495000,
     staffingCost: 187000,
-    netSavings: 271000,
-    marginalNetSavings: 56000,
+    netSavings: 308000,
+    marginalNetSavings: 74000,
   },
   {
     workers: 6,
     patientsPerYear: 264,
-    callsAverted: 691,
-    grossSavings: 518000,
+    callsAverted: 781,
+    grossSavings: 586000,
     staffingCost: 225000,
-    netSavings: 294000,
-    marginalNetSavings: 22000,
+    netSavings: 361000,
+    marginalNetSavings: 53000,
   },
   {
     workers: 7,
     patientsPerYear: 308,
-    callsAverted: 784,
-    grossSavings: 588000,
+    callsAverted: 869,
+    grossSavings: 652000,
     staffingCost: 262000,
-    netSavings: 326000,
-    marginalNetSavings: 33000,
+    netSavings: 390000,
+    marginalNetSavings: 29000,
   },
   {
     workers: 8,
     patientsPerYear: 352,
-    callsAverted: 859,
-    grossSavings: 644000,
+    callsAverted: 985,
+    grossSavings: 739000,
     staffingCost: 299000,
-    netSavings: 345000,
-    marginalNetSavings: 18000,
+    netSavings: 439000,
+    marginalNetSavings: 49000,
   },
   {
     workers: 9,
     patientsPerYear: 396,
-    callsAverted: 1002,
-    grossSavings: 752000,
+    callsAverted: 1074,
+    grossSavings: 805000,
     staffingCost: 337000,
-    netSavings: 415000,
-    marginalNetSavings: 70000,
-    best: true,
+    netSavings: 468000,
+    marginalNetSavings: 29000,
   },
   {
     workers: 10,
-    patientsPerYear: 417,
-    callsAverted: 1027,
-    grossSavings: 770000,
+    patientsPerYear: 440,
+    callsAverted: 1138,
+    grossSavings: 853000,
     staffingCost: 374000,
-    netSavings: 396000,
-    marginalNetSavings: -19000,
+    netSavings: 479000,
+    marginalNetSavings: 11000,
   },
   {
     workers: 11,
-    patientsPerYear: 417,
-    callsAverted: 1027,
-    grossSavings: 770000,
+    patientsPerYear: 484,
+    callsAverted: 1206,
+    grossSavings: 905000,
     staffingCost: 412000,
-    netSavings: 358000,
-    marginalNetSavings: -37000,
+    netSavings: 493000,
+    marginalNetSavings: 14000,
   },
   {
     workers: 12,
-    patientsPerYear: 417,
-    callsAverted: 1027,
-    grossSavings: 770000,
+    patientsPerYear: 528,
+    callsAverted: 1292,
+    grossSavings: 969000,
     staffingCost: 449000,
-    netSavings: 321000,
-    marginalNetSavings: -37000,
+    netSavings: 520000,
+    marginalNetSavings: 27000,
   },
   {
     workers: 13,
-    patientsPerYear: 417,
-    callsAverted: 1027,
-    grossSavings: 770000,
+    patientsPerYear: 572,
+    callsAverted: 1382,
+    grossSavings: 1036000,
     staffingCost: 487000,
-    netSavings: 283000,
+    netSavings: 550000,
+    marginalNetSavings: 30000,
+  },
+  {
+    workers: 14,
+    patientsPerYear: 616,
+    callsAverted: 1463,
+    grossSavings: 1097000,
+    staffingCost: 524000,
+    netSavings: 573000,
+    marginalNetSavings: 23000,
+  },
+  {
+    workers: 15,
+    patientsPerYear: 660,
+    callsAverted: 1508,
+    grossSavings: 1131000,
+    staffingCost: 561000,
+    netSavings: 570000,
+    marginalNetSavings: -3000,
+  },
+  {
+    workers: 16,
+    patientsPerYear: 704,
+    callsAverted: 1611,
+    grossSavings: 1208000,
+    staffingCost: 599000,
+    netSavings: 609000,
+    marginalNetSavings: 40000,
+  },
+  {
+    workers: 17,
+    patientsPerYear: 748,
+    callsAverted: 1662,
+    grossSavings: 1247000,
+    staffingCost: 636000,
+    netSavings: 610000,
+    marginalNetSavings: 1000,
+  },
+  {
+    workers: 18,
+    patientsPerYear: 792,
+    callsAverted: 1726,
+    grossSavings: 1295000,
+    staffingCost: 674000,
+    netSavings: 621000,
+    marginalNetSavings: 11000,
+    best: true,
+  },
+  {
+    workers: 19,
+    patientsPerYear: 836,
+    callsAverted: 1777,
+    grossSavings: 1332000,
+    staffingCost: 711000,
+    netSavings: 621000,
+    marginalNetSavings: 0,
+    best: true,
+  },
+  {
+    workers: 20,
+    patientsPerYear: 880,
+    callsAverted: 1805,
+    grossSavings: 1354000,
+    staffingCost: 749000,
+    netSavings: 605000,
+    marginalNetSavings: -16000,
+  },
+  {
+    workers: 21,
+    patientsPerYear: 924,
+    callsAverted: 1848,
+    grossSavings: 1386000,
+    staffingCost: 786000,
+    netSavings: 600000,
+    marginalNetSavings: -5000,
+  },
+  {
+    workers: 22,
+    patientsPerYear: 968,
+    callsAverted: 1894,
+    grossSavings: 1420000,
+    staffingCost: 823000,
+    netSavings: 597000,
+    marginalNetSavings: -3000,
+  },
+  {
+    workers: 23,
+    patientsPerYear: 1012,
+    callsAverted: 1946,
+    grossSavings: 1460000,
+    staffingCost: 861000,
+    netSavings: 599000,
+    marginalNetSavings: 2000,
+  },
+  {
+    workers: 24,
+    patientsPerYear: 1056,
+    callsAverted: 1987,
+    grossSavings: 1490000,
+    staffingCost: 898000,
+    netSavings: 592000,
+    marginalNetSavings: -7000,
+  },
+  {
+    workers: 25,
+    patientsPerYear: 1100,
+    callsAverted: 2026,
+    grossSavings: 1520000,
+    staffingCost: 936000,
+    netSavings: 584000,
+    marginalNetSavings: -8000,
+  },
+  {
+    workers: 26,
+    patientsPerYear: 1144,
+    callsAverted: 2067,
+    grossSavings: 1551000,
+    staffingCost: 973000,
+    netSavings: 578000,
+    marginalNetSavings: -7000,
+  },
+  {
+    workers: 27,
+    patientsPerYear: 1188,
+    callsAverted: 2115,
+    grossSavings: 1586000,
+    staffingCost: 1011000,
+    netSavings: 576000,
+    marginalNetSavings: -2000,
+  },
+  {
+    workers: 28,
+    patientsPerYear: 1232,
+    callsAverted: 2166,
+    grossSavings: 1625000,
+    staffingCost: 1048000,
+    netSavings: 577000,
+    marginalNetSavings: 1000,
+  },
+  {
+    workers: 29,
+    patientsPerYear: 1276,
+    callsAverted: 2196,
+    grossSavings: 1647000,
+    staffingCost: 1085000,
+    netSavings: 561000,
+    marginalNetSavings: -15000,
+  },
+  {
+    workers: 30,
+    patientsPerYear: 1283,
+    callsAverted: 2204,
+    grossSavings: 1653000,
+    staffingCost: 1123000,
+    netSavings: 530000,
+    marginalNetSavings: -32000,
+  },
+  {
+    workers: 31,
+    patientsPerYear: 1283,
+    callsAverted: 2204,
+    grossSavings: 1653000,
+    staffingCost: 1160000,
+    netSavings: 492000,
+    marginalNetSavings: -37000,
+  },
+  {
+    workers: 32,
+    patientsPerYear: 1283,
+    callsAverted: 2204,
+    grossSavings: 1653000,
+    staffingCost: 1198000,
+    netSavings: 455000,
+    marginalNetSavings: -37000,
+  },
+  {
+    workers: 33,
+    patientsPerYear: 1283,
+    callsAverted: 2204,
+    grossSavings: 1653000,
+    staffingCost: 1235000,
+    netSavings: 418000,
     marginalNetSavings: -37000,
   },
 ];
 
 const financeSummary = {
   currentWorkers: 2,
-  currentNetSavings: "$140,000",
-  bestWorkers: 9,
-  bestNetSavings: "$415,000",
-  maxSuperUsers: 417,
+  currentNetSavings: "$157,000",
+  bestWorkers: "18–19",
+  bestNetSavings: "$621,000",
+  maxSuperUsers: 1283,
   costPerCall: "$1,500",
   caseloadPerWorker: 11,
   caseDurationMonths: 3,
@@ -1131,7 +1308,6 @@ function App() {
                   </div>
 
                   <div style={styles.row}>
-                    <div style={styles.darkSmallText}>Risk Score: {client.riskScore.toFixed(2)}</div>
                     <div style={styles.darkSmallText}>Last Call: {client.lastCall}</div>
                   </div>
                 </div>
@@ -1244,25 +1420,25 @@ function App() {
         <div style={styles.statsGrid}>
           <div style={styles.smallCard}>
             <div>Best PR-AUC</div>
-            <div style={styles.statNumber}>0.147</div>
+            <div style={styles.statNumber}>0.255</div>
             <div style={styles.smallText}>Logistic regression</div>
           </div>
 
           <div style={styles.smallCard}>
             <div>Best ROC-AUC</div>
-            <div style={styles.statNumber}>0.931</div>
+            <div style={styles.statNumber}>0.920</div>
             <div style={styles.smallText}>Random forest</div>
           </div>
 
           <div style={styles.smallCard}>
             <div>Top 88 Precision</div>
-            <div style={styles.statNumber}>22.7%</div>
+            <div style={styles.statNumber}>40.9%</div>
             <div style={styles.smallText}>Logistic regression at annual capacity</div>
           </div>
 
           <div style={styles.smallCard}>
             <div>All Positives</div>
-            <div style={styles.statNumber}>105</div>
+            <div style={styles.statNumber}>166</div>
             <div style={styles.smallText}>Observed positives in evaluation set</div>
           </div>
         </div>
@@ -1271,8 +1447,8 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Overall Model Performance</h2>
         <p style={styles.chartSubtitle}>
-          PR-AUC and precision at top capacity are especially useful here because super-user prediction
-          is an imbalanced problem and the client’s outreach capacity is limited.
+          PR-AUC and precision at top capacity are the primary metrics here because future EMS super users
+          are rare and the ART has limited outreach capacity.
         </p>
 
         <SimpleTable
@@ -1288,10 +1464,10 @@ function App() {
       </div>
 
       <div style={styles.largePanel}>
-        <h2 style={styles.sectionTitle}>Model Performance at Capacity Thresholds</h2>
+        <h2 style={styles.sectionTitle}>Model Performance at Operational Capacity Thresholds</h2>
         <p style={styles.chartSubtitle}>
           This table translates model output into operational capacity: 22 patients reflects current
-          simultaneous capacity, 88 reflects estimated annual clients served, and 200 reflects expanded outreach.
+          simultaneous case load, 88 reflects current annual capacity, and 200 reflects expanded outreach.
         </p>
 
         <SimpleTable
@@ -1310,8 +1486,8 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Classification Metrics at 0.30 Threshold</h2>
         <p style={styles.chartSubtitle}>
-          These metrics describe binary classification performance when the selected model uses a 0.30
-          risk-score threshold.
+          These metrics describe binary classification performance when the selected logistic regression
+          model uses a 0.30 threshold.
         </p>
 
         <div style={styles.chartGrid}>
@@ -1333,10 +1509,9 @@ function App() {
             <h2 style={styles.summaryHeadline}>Model Interpretation</h2>
             <div style={styles.summaryDivider} />
             <p style={{ color: theme.lightMuted, lineHeight: 1.7, margin: 0 }}>
-              The model should be used as a prioritization tool, not a final decision-maker. Because
-              EMS super-user prediction is highly imbalanced, the most useful question is not only
-              whether the model is accurate overall, but whether it can help staff identify a manageable
-              queue of high-priority clients for outreach.
+              The selected model is a penalized logistic regression. At the ART’s current annual capacity
+              of 88 clients, it identifies 36 true future super users, or about 40.9% precision. The model
+              should be used as a prioritization tool, not a replacement for staff judgment.
             </p>
           </div>
         </div>
@@ -1351,10 +1526,10 @@ function App() {
             <div style={styles.summaryDivider} />
 
             <ul style={styles.insightList}>
-              <li>Logistic regression performs better on PR-AUC and precision at current annual capacity.</li>
-              <li>Random forest has slightly higher ROC-AUC but lower precision at top 88.</li>
-              <li>The dashboard should support ranked review rather than only binary classification.</li>
-              <li>Capacity thresholds help connect model output to staffing and outreach planning.</li>
+              <li>Logistic regression is the selected model because it has the strongest PR-AUC and top-88 precision.</li>
+              <li>At current annual capacity, the model identifies 36 true future super users.</li>
+              <li>Top-88 precision is 40.9%, substantially stronger than the earlier prototype result.</li>
+              <li>Capacity thresholds help translate model performance into staffing and outreach decisions.</li>
             </ul>
           </div>
         </div>
@@ -1367,8 +1542,8 @@ function App() {
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Summary Statistics</h1>
         <p style={styles.pageSubtitle}>
-          Descriptive statistics and prototype charts summarizing both current client data and sample client 
-          records shown in the dashboard. The visuals based on fake sample data can later be replaced with
+          Descriptive statistics and prototype charts summarizing the sample client records shown in
+          the dashboard. These visuals are based on fake sample data and can later be replaced with
           real dashboard exports.
         </p>
       </div>
@@ -1376,16 +1551,16 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Client Analysis</h2>
         <p style={styles.chartSubtitle}>
-          These charts summarize the exploratory data analysis comparing super users and non-super users by 
-          selected demographic and service-related indicators.
+          These charts summarize the R Markdown EDA comparing super users and non-super users by selected
+          demographic and service-related indicators. Values are approximate percentages translated from
+          the attached EDA charts.
         </p>
 
         <div style={styles.chartGrid}>
           <div style={styles.chartCard}>
             <h3 style={styles.chartTitle}>Race</h3>
             <p style={styles.chartSubtitle}>
-              Percent of super users and non-super users identified as Black or White. Other races are not included
-              as they do not have enough representation in the current data.
+              Percent of super users and non-super users identified as Black or White.
             </p>
             <GroupedHorizontalPercentChart data={edaRaceData} max={60} />
           </div>
@@ -1594,7 +1769,7 @@ function App() {
           <div style={styles.smallCard}>
             <div>Highest Net Savings</div>
             <div style={styles.statNumber}>{financeSummary.bestNetSavings}</div>
-            <div style={styles.smallText}>Estimated at 9 workers</div>
+            <div style={styles.smallText}>Estimated around 18–19 workers</div>
           </div>
 
           <div style={styles.smallCard}>
@@ -1612,7 +1787,7 @@ function App() {
           <div style={styles.smallCard}>
             <div>Cost per EMS Call</div>
             <div style={styles.statNumber}>{financeSummary.costPerCall}</div>
-            <div style={styles.smallText}>Placeholder estimate used in model</div>
+            <div style={styles.smallText}>Guilford County analysis assumption</div>
           </div>
 
           <div style={styles.smallCard}>
@@ -1632,9 +1807,8 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Net Savings by Staffing Level</h2>
         <p style={styles.chartSubtitle}>
-          The mid-range scenario assumes a 50% call reduction. In this model, the highest estimated
-          net savings occurs at 9 workers; after that, additional staffing cost is no longer fully offset
-          by savings.
+          The mid-range scenario assumes a 50% call reduction. Net savings rise as the ART serves
+          more high-risk patients, then flatten as lower-risk cohorts are added and staffing costs increase.
         </p>
 
         <ResponsiveContainer width="100%" height={320}>
@@ -1653,7 +1827,7 @@ function App() {
               name="Net savings"
               stroke={theme.chartTeal}
               strokeWidth={3}
-              dot={{ r: 5, fill: theme.chartGold }}
+              dot={{ r: 4, fill: theme.chartGold }}
               activeDot={{ r: 7 }}
             />
             <Line
@@ -1662,7 +1836,7 @@ function App() {
               name="Staffing cost"
               stroke={theme.chartGold}
               strokeWidth={3}
-              dot={{ r: 4 }}
+              dot={{ r: 3 }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -1697,7 +1871,8 @@ function App() {
       <div style={styles.largePanel}>
         <h2 style={styles.sectionTitle}>Reference Program Benchmarks</h2>
         <p style={styles.chartSubtitle}>
-          These benchmarks compare reported call reductions and estimated savings from similar programs.
+          These benchmarks compare reported call reductions and estimated savings from similar community
+          paramedicine and case management programs.
         </p>
 
         <SimpleTable
@@ -1722,23 +1897,23 @@ function App() {
             <div style={styles.summaryDivider} />
 
             <p style={{ color: theme.lightMuted, lineHeight: 1.7, margin: 0 }}>
-              The cost/benefit analysis suggests that expanding outreach capacity could generate
-              meaningful net savings if reduced EMS utilization offsets staffing costs. The highest
-              estimated net savings in the mid-range scenario occurs around 9 workers.
+              The updated cost/benefit analysis suggests that model-guided outreach is cost-positive
+              across a wide range of staffing levels. At the current two-worker baseline, estimated net
+              savings are approximately $157,000 in the mid-range scenario.
             </p>
           </div>
 
           <div style={styles.summaryBigCard}>
             <h2 style={styles.summaryHeadline}>Planning Implication</h2>
-            <div style={styles.summaryValue}>9</div>
-            <div style={styles.smallText}>Estimated optimal staffing level in the mid-range scenario</div>
+            <div style={styles.summaryValue}>15+</div>
+            <div style={styles.smallText}>Approximate expansion range supported by the updated analysis</div>
             <div style={styles.summaryDivider} />
 
             <ul style={styles.insightList}>
               <li>Current staffing can serve about 88 patients per year.</li>
-              <li>At 9 workers, estimated net savings reach about $415,000.</li>
-              <li>After 9 workers, marginal net savings turn negative in the mid-range scenario.</li>
-              <li>The finance page can help the client discuss staffing needs using concrete cost estimates.</li>
+              <li>At two workers, the updated model estimates $157,000 in net savings.</li>
+              <li>Net savings reach about $621,000 around 18–19 workers in the mid-range table.</li>
+              <li>The finance page helps translate model-guided outreach into staffing and budget decisions.</li>
             </ul>
           </div>
         </div>
